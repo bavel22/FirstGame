@@ -72,6 +72,7 @@ public class Menu extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
 
         int mx = e.getX();
+        //test
         int my = e.getY();
 
 //Play button
