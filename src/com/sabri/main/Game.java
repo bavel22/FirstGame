@@ -56,7 +56,9 @@ public class Game extends Canvas implements Serializable, Runnable {
         shop = new Shop(handler, hud);
 
         menu = new Menu(this, handler, hud);
+        menu.tick();
         this.addMouseListener(menu);
+        this.addMouseMotionListener(menu);
         this.addMouseListener(shop);
         this.addKeyListener(new KeyInput(handler, this));
 
@@ -143,6 +145,7 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     private void tick() {
         handler.tick();
+
 
         if (!paused) {
 
