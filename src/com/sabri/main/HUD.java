@@ -4,6 +4,7 @@ import java.awt.*;
 
 public class HUD {
 
+    public  int bounds = 0;
     public static float HEALTH = 100;
     private float greenValue = 255;
 
@@ -35,9 +36,11 @@ public class HUD {
     public void tick() {
 
 
-        HEALTH = Game.clamp(HEALTH, 0 , 100);
-        greenValue = (int)Game.clamp(greenValue, 0, 255);
+
+        HEALTH = Game.clamp(HEALTH, 0 , 100+ (bounds/2));
         greenValue = HEALTH * 2;
+        greenValue = (int)Game.clamp(greenValue, 0, 255);
+
 
         score++;
     }
@@ -48,12 +51,14 @@ public class HUD {
         g.fillRect(15, 15, 200, 32);
 
         g.setColor(new Color(75, (int)greenValue, 0));
-        g.fillRect(15, 15, (int)HEALTH * 2, 32);
+        g.fillRect(15, 15, (int)HEALTH * 2 + bounds, 32);
         g.setColor(Color.white);
-        g.drawRect(15, 15, (int)HEALTH * 2, 32);
+        g.drawRect(15, 15, (int)HEALTH * 2 + bounds, 32);
 
         g.drawString("Score: " + score, 10, 64);
         g.drawString("Level: " + level, 13, 84);
+        g.drawString("Press SPACE for shop",  13, 120);
+
 
     }
 }

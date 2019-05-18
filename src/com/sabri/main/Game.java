@@ -27,15 +27,17 @@ public class Game extends Canvas implements Serializable, Runnable {
     private HUD hud;
     private Spawn spawner;
     private Menu menu;
+    private Shop shop;
     public static boolean paused = false;
 
 
     public enum STATE {
-      Menu,
-      Game,
-      HELP,
+        Menu,
+        Game,
+        HELP,
         End,
-        Select;
+        Select,
+        Shop;
 
     }
 
@@ -45,23 +47,24 @@ public class Game extends Canvas implements Serializable, Runnable {
     public Game() {
 
 //add AudioPlayer to Game instance
-       // AudioPlayer.load();
-      //  AudioPlayer.getMusic("music").loop();
+        // AudioPlayer.load();
+        //  AudioPlayer.getMusic("music").loop();
 
 
         handler = new Handler();
         hud = new HUD();
+        shop = new Shop(handler, hud);
 
         menu = new Menu(this, handler, hud);
         this.addMouseListener(menu);
+        this.addMouseListener(shop);
         this.addKeyListener(new KeyInput(handler, this));
 
 
+        new Window((int) WIDTH, (int) HEIGHT, "LIMS INTERFACE", this);
 
-        new Window((int)WIDTH, (int)HEIGHT, "LIMS INTERFACE", this);
 
-
-       spawner = new Spawn(handler, hud, this);
+        spawner = new Spawn(handler, hud, this);
 
         r = new Random();
 
@@ -79,7 +82,7 @@ public class Game extends Canvas implements Serializable, Runnable {
             handler.addObject(new BasicEnemy(r.nextInt((int) Game.WIDTH), r.nextInt((int) Game.HEIGHT), ID.BasicEnemy, handler));
             handler.addObject(new BasicEnemy(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
 
-        }else {
+        } else {
 
             for (int i = 0; i < 30; i++) {
                 handler.addObject(new MenuParticle(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
@@ -88,7 +91,6 @@ public class Game extends Canvas implements Serializable, Runnable {
 
 
         }
-
 
 
     }
@@ -142,9 +144,17 @@ public class Game extends Canvas implements Serializable, Runnable {
     private void tick() {
         handler.tick();
 
-        if(!paused) {
-        if (gameSTATE == STATE.Game) {
+        if (!paused) {
 
+            if (gameSTATE == STATE.Shop) {
+                menu.tick();
+                handler.tick();
+
+
+
+            }
+
+            if (gameSTATE == STATE.Game) {
 
 
                 hud.tick();
@@ -154,7 +164,7 @@ public class Game extends Canvas implements Serializable, Runnable {
                 if (HUD.HEALTH <= 0) {
                     HUD.HEALTH = 100;
 
-                    gameSTATE  = STATE.End;
+                    gameSTATE = STATE.End;
                     handler.clearEnemies();
 
                     for (int i = 0; i < 10; i++) {
@@ -165,7 +175,7 @@ public class Game extends Canvas implements Serializable, Runnable {
             }
 
 
-        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.End || gameSTATE == STATE.Select) {
+        } else if (gameSTATE == STATE.Menu || gameSTATE == STATE.End || gameSTATE == STATE.Select) {
             menu.tick();
             handler.tick();
         }
@@ -182,10 +192,10 @@ public class Game extends Canvas implements Serializable, Runnable {
         Graphics g = bs.getDrawGraphics();
 
         g.setColor(Color.black);
-        g.fillRect(0, 0, (int)WIDTH, (int)HEIGHT);
+        g.fillRect(0, 0, (int) WIDTH, (int) HEIGHT);
 
 
-        handler.render(g);
+
 
         if (paused) {
 
@@ -193,11 +203,14 @@ public class Game extends Canvas implements Serializable, Runnable {
         }
 
         if (gameSTATE == STATE.Game) {
-
+            handler.render(g);
             hud.render(g);
-        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.HELP|| gameSTATE == STATE.End || gameSTATE == STATE.Select) {
-            menu.render(g);
 
+        } else if (gameSTATE == STATE.Shop) {
+            shop.render(g);
+        } else if (gameSTATE == STATE.Menu || gameSTATE == STATE.HELP || gameSTATE == STATE.End || gameSTATE == STATE.Select) {
+            menu.render(g);
+            handler.render(g);
         }
         g.dispose();
         bs.show();
@@ -205,7 +218,7 @@ public class Game extends Canvas implements Serializable, Runnable {
     }
 
     public static float clamp(float var, float min, float max) {
-        if(var >= max)
+        if (var >= max)
             return var = max;
         else if (var <= min)
             return var = min;
