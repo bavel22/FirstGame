@@ -10,13 +10,15 @@ public class Menu extends MouseAdapter {
 
     private Handler handler;
     private Random r = new Random();
+    private HUD hud;
     Game game;
 
 
-    public Menu(Game game, Handler handler) {
+    public Menu(Game game, Handler handler, HUD hud) {
 
         this.game = game;
         this.handler = handler;
+        this.hud = hud;
     }
 
     public void render(Graphics g) {
@@ -62,6 +64,19 @@ public class Menu extends MouseAdapter {
             g.drawString("Back", 700, 600);
 
         }
+        if (game.gameSTATE == Game.STATE.End) {
+
+            g.setFont(fnt);
+            g.setColor(Color.white);
+            g.drawString("Game Over", 750, 100);
+
+            g.setFont(fnt2);
+            g.drawString("You lost, score was only: " + hud.getScore(), 100, 200);
+
+            g.setFont(fnt2);
+            g.drawString("try again", 700, 600);
+
+        }
     }
 
     public void tick() {
@@ -79,8 +94,10 @@ public class Menu extends MouseAdapter {
         if (game.gameSTATE == Game.STATE.Menu) {
             if (mouseOver(mx, my, 650, 400, 300, 100)) {
                 game.gameSTATE = Game.STATE.Game;
-
                 handler.addObject(new Player((int) Game.WIDTH / 2 - 32, (int) Game.HEIGHT / 2 - 32, ID.Player, handler));
+                handler.clearEnemies();
+
+
                 handler.addObject(new BasicEnemy(r.nextInt((int) Game.WIDTH), r.nextInt((int) Game.HEIGHT), ID.BasicEnemy, handler));
                 handler.addObject(new BasicEnemy(r.nextInt((int) Game.WIDTH), r.nextInt((int) Game.HEIGHT), ID.BasicEnemy, handler));
             }
@@ -104,6 +121,16 @@ public class Menu extends MouseAdapter {
 
             if (mouseOver(mx, my, 650, 600, 300, 100)) {
                 game.gameSTATE = Game.STATE.Menu;
+            }
+        }
+//try again button for game over screen
+        if (game.gameSTATE == Game.STATE.End) {
+
+
+            if (mouseOver(mx, my, 650, 600, 300, 100)) {
+                game.gameSTATE = Game.STATE.Menu;
+                hud.setLevel(1);
+                hud.setScore(0);
             }
         }
 

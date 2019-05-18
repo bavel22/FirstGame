@@ -25,20 +25,22 @@ public class Game extends Canvas implements Serializable, Runnable {
     public enum STATE {
       Menu,
       Game,
-      HELP
+      HELP,
+        End,
 
     }
 
-    public STATE gameSTATE = STATE.Menu;
+    public static STATE gameSTATE = STATE.Menu;
 
 
     public Game() {
 
 
 
-
         handler = new Handler();
-        menu = new Menu(this, handler);
+        hud = new HUD();
+
+        menu = new Menu(this, handler, hud);
         this.addMouseListener(menu);
         this.addKeyListener(new KeyInput(handler));
 
@@ -46,7 +48,7 @@ public class Game extends Canvas implements Serializable, Runnable {
 
         new Window((int)WIDTH, (int)HEIGHT, "LIMS INTERFACE", this);
 
-        hud = new HUD();
+
        spawner = new Spawn(handler, hud);
 
         r = new Random();
@@ -64,6 +66,13 @@ public class Game extends Canvas implements Serializable, Runnable {
             handler.addObject(new Player((int) WIDTH / 2 - 32, (int) HEIGHT / 2 - 32, ID.Player, handler));
             handler.addObject(new BasicEnemy(r.nextInt((int) Game.WIDTH), r.nextInt((int) Game.HEIGHT), ID.BasicEnemy, handler));
             handler.addObject(new BasicEnemy(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
+
+        }else {
+
+            for (int i = 0; i < 10; i++) {
+                handler.addObject(new MenuParticle(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
+
+            }
 
 
         }
@@ -123,7 +132,19 @@ public class Game extends Canvas implements Serializable, Runnable {
         if (gameSTATE == STATE.Game) {
             hud.tick();
             spawner.tick();
-        }else if (gameSTATE == STATE.Menu) {
+
+            if (HUD.HEALTH <= 0) {
+                HUD.HEALTH = 100;
+
+                gameSTATE  = STATE.End;
+                handler.clearEnemies();
+
+                for (int i = 0; i < 10; i++) {
+                    handler.addObject(new MenuParticle(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
+                }
+            }
+
+        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.End) {
             menu.tick();
         }
     }
@@ -147,7 +168,7 @@ public class Game extends Canvas implements Serializable, Runnable {
         if (gameSTATE == STATE.Game) {
 
             hud.render(g);
-        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.HELP) {
+        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.HELP|| gameSTATE == STATE.End) {
             menu.render(g);
 
         }

@@ -28,7 +28,9 @@ public class HUD {
     private float level = 1;
 
 
-
+    public void setScore(float score) {
+        this.score = score;
+    }
 
     public void tick() {
 
