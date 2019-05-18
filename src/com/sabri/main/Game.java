@@ -1,5 +1,6 @@
 package com.sabri.main;
 
+import com.sun.org.apache.bcel.internal.generic.Select;
 import sun.audio.AudioPlayer;
 
 import java.awt.*;
@@ -16,19 +17,25 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     private Thread thread;
     private boolean running = false;
+    public int diff = 0;
 
+    //0 - normal
+    //1 - hard
 
     private Random r;
     private Handler handler;
     private HUD hud;
     private Spawn spawner;
     private Menu menu;
+    public static boolean paused = false;
+
 
     public enum STATE {
       Menu,
       Game,
       HELP,
         End,
+        Select;
 
     }
 
@@ -41,19 +48,20 @@ public class Game extends Canvas implements Serializable, Runnable {
        // AudioPlayer.load();
       //  AudioPlayer.getMusic("music").loop();
 
+
         handler = new Handler();
         hud = new HUD();
 
         menu = new Menu(this, handler, hud);
         this.addMouseListener(menu);
-        this.addKeyListener(new KeyInput(handler));
+        this.addKeyListener(new KeyInput(handler, this));
 
 
 
         new Window((int)WIDTH, (int)HEIGHT, "LIMS INTERFACE", this);
 
 
-       spawner = new Spawn(handler, hud);
+       spawner = new Spawn(handler, hud, this);
 
         r = new Random();
 
@@ -133,23 +141,33 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     private void tick() {
         handler.tick();
+
+        if(!paused) {
         if (gameSTATE == STATE.Game) {
-            hud.tick();
-            spawner.tick();
 
-            if (HUD.HEALTH <= 0) {
-                HUD.HEALTH = 100;
 
-                gameSTATE  = STATE.End;
-                handler.clearEnemies();
 
-                for (int i = 0; i < 10; i++) {
-                    handler.addObject(new MenuParticle(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
+                hud.tick();
+                spawner.tick();
+                handler.tick();
+
+                if (HUD.HEALTH <= 0) {
+                    HUD.HEALTH = 100;
+
+                    gameSTATE  = STATE.End;
+                    handler.clearEnemies();
+
+                    for (int i = 0; i < 10; i++) {
+                        handler.addObject(new MenuParticle(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
+                    }
                 }
+
             }
 
-        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.End) {
+
+        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.End || gameSTATE == STATE.Select) {
             menu.tick();
+            handler.tick();
         }
     }
 
@@ -169,10 +187,15 @@ public class Game extends Canvas implements Serializable, Runnable {
 
         handler.render(g);
 
+        if (paused) {
+
+            g.drawString("Pause", 100, 100);
+        }
+
         if (gameSTATE == STATE.Game) {
 
             hud.render(g);
-        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.HELP|| gameSTATE == STATE.End) {
+        }else if (gameSTATE == STATE.Menu || gameSTATE == STATE.HELP|| gameSTATE == STATE.End || gameSTATE == STATE.Select) {
             menu.render(g);
 
         }
