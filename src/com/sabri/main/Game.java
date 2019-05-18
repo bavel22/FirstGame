@@ -1,5 +1,7 @@
 package com.sabri.main;
 
+import sun.audio.AudioPlayer;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.io.Serializable;
@@ -35,7 +37,9 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     public Game() {
 
-
+//add AudioPlayer to Game instance
+       // AudioPlayer.load();
+      //  AudioPlayer.getMusic("music").loop();
 
         handler = new Handler();
         hud = new HUD();
@@ -69,7 +73,7 @@ public class Game extends Canvas implements Serializable, Runnable {
 
         }else {
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 30; i++) {
                 handler.addObject(new MenuParticle(r.nextInt((int) WIDTH), r.nextInt((int) HEIGHT), ID.BasicEnemy, handler));
 
             }

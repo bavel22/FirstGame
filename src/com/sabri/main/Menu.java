@@ -28,6 +28,8 @@ public class Menu extends MouseAdapter {
         if (game.gameSTATE == Game.STATE.Menu) {
 
 
+
+
             g.setFont(fnt);
             g.setColor(Color.white);
             g.drawString("Menu", 750, 100);
@@ -105,6 +107,10 @@ public class Menu extends MouseAdapter {
 //Quit button
         if (game.gameSTATE == Game.STATE.Menu) {
         if (mouseOver(mx, my, 650, 600, 300, 100)) {
+
+//how to add a sound -> need to figure out AudioPlayer libraries
+//          AudioPlayer.getSound("menu sound").play;
+
             System.exit(1);
         }
         }
@@ -128,9 +134,11 @@ public class Menu extends MouseAdapter {
 
 
             if (mouseOver(mx, my, 650, 600, 300, 100)) {
+
                 game.gameSTATE = Game.STATE.Menu;
                 hud.setLevel(1);
                 hud.setScore(0);
+
             }
         }
 

@@ -38,7 +38,7 @@ public class MenuParticle extends GameObject {
         if (x <= 0 || x >= Game.WIDTH - 16) velX *= -1;
 
 
-        handler.addObject(new Trail((int) x, (int) y, ID.MenuParticle, col, 16, 16, 0.02f, handler));
+        handler.addObject(new Trail((int) x, (int) y, ID.MenuParticle, col, 8, 8, 0.02f, handler));
 
     }
 
@@ -46,11 +46,11 @@ public class MenuParticle extends GameObject {
     public void render(Graphics g) {
 
         g.setColor(col);
-        g.fillRect((int) x, (int) y, 16, 16);
+        g.fillRect((int) x, (int) y, 8, 8);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, 32, 32);
+        return new Rectangle((int) x, (int) y, 8, 8);
     }
 }
 
