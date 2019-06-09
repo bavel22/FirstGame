@@ -1,32 +1,71 @@
-
-/*
 package com.sabri.main;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 
-public class AudioPlayer {
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
-    public static Map<String, Music> musicMap = new HashMap<String, Music>();
-    public static Map<String, Sound> soundMap = new HashMap<String, Sound>();
-
-    public static void load(){
-
+public class AudioPlayer{
+    Clip audioClip;
+    boolean playCompleted;
+    String path;
+    public AudioPlayer(String path){
+        this.path = path;
+        File audioFile = new File(path);
 
         try {
-            soundMap.put("music", new Music("directory/loca tion"));
-            musicMap.put("menu sound", new Sound("directory/loca tion"));
-        } catch (Exception e) {
-            e.printStackTrace();
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+
+            AudioFormat format = audioStream.getFormat();
+
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+
+            audioClip = (Clip) AudioSystem.getLine(info);
+
+            audioClip.open(audioStream);
+
+        } catch (UnsupportedAudioFileException ex) {
+            System.out.println("The specified audio file is not supported.");
+            ex.printStackTrace();
+        } catch (LineUnavailableException ex) {
+            System.out.println("Audio line for playing back is unavailable.");
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            System.out.println("Error playing the audio file.");
+            ex.printStackTrace();
+        }
+    }
+    void play() {
+        audioClip.start();
+
+    }
+    void loop(){
+        audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+    void stop(){
+        audioClip.stop();
+    }
+    void cleanup(){
+        audioClip.close();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        String audioFilePath = "src\\com\\sabri\\main\\coin_3.wav";
+        AudioPlayer player = new AudioPlayer(audioFilePath);
+        player.play();
+        // give the sound time to play
+        while(true){
+            Thread.sleep(1000);
         }
     }
 
-    public static Music getMusic(String key){
-        return musicMap.get(key);
-    }
 
-    public static Sound getSound(String key) {
-        return soundMap.get(key);
-    }
 }
-*/

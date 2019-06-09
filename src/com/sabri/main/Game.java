@@ -1,7 +1,6 @@
 package com.sabri.main;
 
-import com.sun.org.apache.bcel.internal.generic.Select;
-import sun.audio.AudioPlayer;
+
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -21,7 +20,7 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     //0 - normal
     //1 - hard
-
+    private AudioPlayer backgroundMusic;
     private Random r;
     private Handler handler;
     private HUD hud;
@@ -99,6 +98,8 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     public synchronized void start() {
         thread = new Thread(this);
+        backgroundMusic = new AudioPlayer("sounds\\coin_3.wav");
+        backgroundMusic.loop();
         thread.start();
         running = true;
     }
