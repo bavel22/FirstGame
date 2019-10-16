@@ -2,6 +2,8 @@ package com.sabri.main;
 
 
 
+import com.sabri.main.Enemies.BasicEnemy;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.io.Serializable;
@@ -20,6 +22,7 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     //0 - normal
     //1 - hard
+
     private AudioPlayer backgroundMusic;
     private Random r;
     private Handler handler;
@@ -98,8 +101,12 @@ public class Game extends Canvas implements Serializable, Runnable {
 
     public synchronized void start() {
         thread = new Thread(this);
+
+    //Currently setup to play background music when the game is started. Loops continuously.
+
         backgroundMusic = new AudioPlayer("sounds\\coin_3.wav");
         backgroundMusic.loop();
+
         thread.start();
         running = true;
     }

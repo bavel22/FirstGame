@@ -1,5 +1,7 @@
 package com.sabri.main;
 
+import com.sabri.main.Enemies.BasicEnemy;
+
 import java.util.Random;
 
 public class Spawn {

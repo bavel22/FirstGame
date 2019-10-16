@@ -1,5 +1,7 @@
 package com.sabri.main;
 
+import com.sabri.main.Enemies.BasicEnemy;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -238,10 +240,10 @@ public class Menu extends MouseAdapter {
                 game.gameSTATE = Game.STATE.Select;
 
                 try {
-                    wait(1);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
+                     wait(1);
+                 } catch (InterruptedException e1) {
+                   e1.printStackTrace();
+                 }
 
                 //  handler.addObject(new BasicEnemy(r.nextInt((int) Game.WIDTH), r.nextInt((int) Game.HEIGHT), ID.BasicEnemy, handler));
                 //  handler.addObject(new BasicEnemy(r.nextInt((int) Game.WIDTH), r.nextInt((int) Game.HEIGHT), ID.BasicEnemy, handler));

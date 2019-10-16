@@ -1,4 +1,6 @@
-package com.sabri.main;
+package com.sabri.main.Enemies;
+
+import com.sabri.main.*;
 
 import java.awt.*;
 
@@ -15,16 +17,16 @@ public class BasicEnemy extends GameObject {
 
     }
 
-    public void tick() {
+           public void tick() {
 
-        x += velX;
-        y += velY;
+            x += velX;
+            y += velY;
 
-        if (y <= 0 || y >= Game.HEIGHT - 32) velY *= -1;
-        if (x <= 0 || x >= Game.WIDTH - 16) velX *= -1;
+            if (y <= 0 || y >= Game.HEIGHT - 32) velY *= -1;
+            if (x <= 0 || x >= Game.WIDTH - 16) velX *= -1;
 
 
-        handler.addObject(new Trail((int)x, (int)y, ID.Trail , Color.red, 16, 16, 0.02f, handler));
+            handler.addObject(new Trail((int)x, (int)y, ID.Trail , Color.red, 16, 16, 0.02f, handler));
 
     }
 

@@ -2,7 +2,11 @@ package com.sabri.main;
 
 import java.awt.*;
 
+//abstract parent class for all Game Objects
+
 public abstract class GameObject {
+
+//Dictates that game objects must have an X and Y location, ID, and velocity (X and Y directions).
 
     protected float x, y;
     protected ID id;
@@ -58,6 +62,5 @@ public abstract class GameObject {
     public abstract void tick();
     public abstract void render(Graphics g);
     public abstract Rectangle getBounds();
-
 
 }
